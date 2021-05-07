@@ -13,9 +13,9 @@
 ####
 # CONFIG START
 ####
-$probeIP = "10.4.4.116"
-$sensorPort = "5050"
-$sensorKey ="0F126019-CDAB-4246-9A9E-C9937CC216A6"
+$probeIP = "PROBE"
+$sensorPort = "PORT"
+$sensorKey ="KEY"
 
 ####
 # CONFIG END
@@ -24,6 +24,7 @@ $sensorKey ="0F126019-CDAB-4246-9A9E-C9937CC216A6"
 $updHid = 0
 $updCri = 0
 $updOpt = 0
+$updCriText = ""
 
 $rebootPending = 0
 $prtgresult = @"
@@ -74,6 +75,7 @@ foreach ($update in $updates){
         $updHid += 1
     }elseif($update.AutoSelectOnWebSites){
         $updCri += 1
+        $updCriText += "KB" + $update.KBArticleIDs + " "
     }else{
         $updOpt += 1
     }
@@ -146,6 +148,7 @@ $prtgresult += @"
         <showChart>1</showChart>
         <showTable>1</showTable>
     </result>
+    <text>Critical: $updCriText </text>
 </prtg>
 
 "@

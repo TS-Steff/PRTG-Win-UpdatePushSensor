@@ -9,13 +9,20 @@
 │   DESCRIPTION : PRTG Windows Update Minimal Push Script                                     |
 └─────────────────────────────────────────────────────────────────────────────────────────────┘
 #>
+[cmdletbinding()]
+param(
+	[Parameter(Position=1, Mandatory=$false)]
+		[switch]$DryRun = $false
+)
+
 
 ####
 # CONFIG START
 ####
-$probeIP = "PROBE"
+$probeIP = "PROBE"  #include https or http
 $sensorPort = "PORT"
 $sensorKey ="KEY"
+$ignoreKBs = @('2267602') #for example Security Intelligence-Update for Defender KB226602
 
 ####
 # CONFIG END
@@ -42,13 +49,11 @@ function sendPush(){
     #$Answer = Invoke-WebRequest -Uri $NETXNUA -Method Post -Body $RequestBody -ContentType $ContentType -UseBasicParsing
     $Answer = Invoke-WebRequest `
        -method POST `
-       -URI ("http://" + $probeIP + ":" + $sensorPort + "/" + $sensorKey) `
+       -URI ($probeIP + ":" + $sensorPort + "/" + $sensorKey) `
        -ContentType "text/xml" `
        -Body $prtgresult `
        -usebasicparsing
 
-       #-Body ("content="+[System.Web.HttpUtility]::UrlEncode.($prtgresult)) `
-    #http://10.4.4.116:5055/637D334C-DCD5-49E3-94CA-CE12ABB184C3?content=<prtg><result><channel>MyChannel</channel><value>10</value></result><text>this%20is%20a%20message</text></prtg>   
     if ($answer.statuscode -ne 200) {
        write-warning "Request to PRTG failed"
        exit 1
@@ -74,18 +79,23 @@ foreach ($update in $updates){
     if ($update.IsHidden){
         $updHid += 1
     }elseif($update.AutoSelectOnWebSites){
-        $updCri += 1
-        $updCriText += "KB" + $update.KBArticleIDs + " "
+        if($ignoreKBs -contains $update.KBArticleIDs -eq $false){
+            write-verbose "no ignores"
+            $updCri += 1
+            $updCriText += "KB" + $update.KBArticleIDs + " "
+        }else{
+            $verbosMsg = "KB" + $update.KBArticleIDs + " will be ignored"
+            write-verbose "$verbosMsg"
+        }
+
     }else{
         $updOpt += 1
     }
 }
 
-write-host "hidden: " $updHid
-write-host "critical: " $updCri
-write-host "optional: " $updOpt
-
-
+write-verbose "hidden: $updHid" 
+write-verbose "critical: $updCri" 
+write-verbose "optional: $updOpt" 
 
 
 # Get days since last update
@@ -96,7 +106,7 @@ $now = (Get-Date).toString("yyyy-MM-dd")
 $diffSinceLastUpdate = New-TimeSpan -Start $LastUpdateDate -End $now
 $diffSinceLastUpdate = $diffSinceLastUpdate.Days
 
-write-host "days: " $diffSinceLastUpdate
+write-verbose "days: $diffSinceLastUpdate" 
 if($rebootPending -eq 1){
     $diffSinceLastUpdate = 0
 }
@@ -105,7 +115,7 @@ if($rebootPending -eq 1){
 $prtgresult += @"
     <result>
         <channel>Reboot pending</channel>
-        <LimitMaxWarning>0.5</LimitMaxWarning>
+        <LimitMaxError>0.5</LimitMaxError>
         <value>$rebootPending</value>
         <showChart>1</showChart>
         <showTable>1</showTable>
@@ -153,5 +163,10 @@ $prtgresult += @"
 
 "@
 
-sendPush
+#sendPush
 
+if($DryRun){
+    write-host $prtgresult
+}else{
+    sendPush
+}

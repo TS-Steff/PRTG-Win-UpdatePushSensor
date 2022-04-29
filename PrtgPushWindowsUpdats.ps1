@@ -22,11 +22,14 @@ param(
 $probeIP = "PROBE"  #include https or http
 $sensorPort = "PORT"
 $sensorKey ="KEY"
-$ignoreKBs = @('2267602') #for example Security Intelligence-Update for Defender KB226602
+$ignoreKBs = @('2267602x') #for example Security Intelligence-Update for Defender KB226602
 
 ####
 # CONFIG END
 ####
+
+### Update Defender Signature
+Update-MpSignature
 
 $updHid = 0
 $updCri = 0

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValueLookup id="ts.WinPushWindowsUpdates" desiredValue="1" undefinedState="Error">
+  <Lookups>
+    <SingleInt state="OK" value="0">OK</SingleInt>
+    <SingleInt state="Error" value="1">Reboot Pending</SingleInt>
+  </Lookups>
+</ValueLookup>

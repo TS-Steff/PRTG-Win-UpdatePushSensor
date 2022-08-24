@@ -120,6 +120,7 @@ $prtgresult += @"
         <channel>Reboot pending</channel>
         <LimitMaxError>0.5</LimitMaxError>
         <value>$rebootPending</value>
+	  <valueLookup>ts.WinPushWindowsUpdates</valueLookup>
         <showChart>1</showChart>
         <showTable>1</showTable>
         <LimitWarningMsg>Reboot pending</LimitWarningMsg>

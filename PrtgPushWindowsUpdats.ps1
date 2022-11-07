@@ -11,11 +11,15 @@
 #>
 [cmdletbinding()]
 param(
-	[Parameter(Position=1, Mandatory=$false)]
-		[switch]$DryRun = $false
+    [Parameter(Mandatory=$false)] [string]$proberIP = "127.0.0.1",
+    [Parameter(Mandatory=$false)] [string]$sensorPort = "5050",
+    [Parameter(Mandatory=$false)] [string]$sensorKey = "KEY",
+    [Parameter(Mandatory=$false)] [string]$ignoreKBs = @('2267602x'), #for example Security Intelligence-Update for Defender KB226602
+	[Parameter(Mandatory=$false)] [switch]$DryRun = $false
 )
 
 
+<#
 ####
 # CONFIG START
 ####
@@ -27,6 +31,7 @@ $ignoreKBs = @('2267602x') #for example Security Intelligence-Update for Defende
 ####
 # CONFIG END
 ####
+#>
 
 ### Update Defender Signature
 Update-MpSignature

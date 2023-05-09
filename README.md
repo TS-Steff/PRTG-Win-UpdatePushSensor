@@ -12,7 +12,7 @@ The scripts pushes the followin information to a *HTTP Push Data Advanced* senso
 - number of optional updates to be installed
 - number of hidden updates
 
-You'll have to edit the script config section for your envirement
+You'll have to edit the script config section for your environment or pass the parameters
 
 ### WinTaskMgr-PrtgPushWindowsUpdate.xml
 If you place the script in C:\Scripts\PrtgPushWindowsUpdats.ps1 you can import the task and save. Makr sure to enter correct credentials.

@@ -11,10 +11,10 @@
 #>
 [cmdletbinding()]
 param(
-    [Parameter(Mandatory=$false)] [string]$proberIP = "127.0.0.1",
-    [Parameter(Mandatory=$false)] [string]$sensorPort = "5050",
+    [Parameter(Mandatory=$false)] [string]$probeIP = "http://127.0.0.1", # include https or http
+    [Parameter(Mandatory=$false)] [string]$sensorPort = "5050", # 5050 http / 5051 https
     [Parameter(Mandatory=$false)] [string]$sensorKey = "KEY",
-    [Parameter(Mandatory=$false)] [string]$ignoreKBs = @('2267602x'), #for example Security Intelligence-Update for Defender KB226602
+    [Parameter(Mandatory=$false)] [string[]]$ignoreKBs = @('2267602x'), #for example Security Intelligence-Update for Defender KB226602
 	[Parameter(Mandatory=$false)] [switch]$DryRun = $false
 )
 

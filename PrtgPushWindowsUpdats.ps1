@@ -15,23 +15,8 @@ param(
     [Parameter(Mandatory=$false)] [string]$sensorPort = "5050", # 5050 http / 5051 https
     [Parameter(Mandatory=$false)] [string]$sensorKey = "KEY",
     [Parameter(Mandatory=$false)] [string[]]$ignoreKBs = @('2267602x'), #for example Security Intelligence-Update for Defender KB226602
-	[Parameter(Mandatory=$false)] [switch]$DryRun = $false
+    [Parameter(Mandatory=$false)] [switch]$DryRun = $false
 )
-
-
-<#
-####
-# CONFIG START
-####
-$probeIP = "PROBE"  #include https or http
-$sensorPort = "PORT"
-$sensorKey ="KEY"
-$ignoreKBs = @('2267602x') #for example Security Intelligence-Update for Defender KB226602
-
-####
-# CONFIG END
-####
-#>
 
 ### Update Defender Signature
 Update-MpSignature
